@@ -16,12 +16,29 @@ namespace JobApplicationTracker.Repository
 
         public async Task<IEnumerable<JobApplication>> GetApplicationsAsync()
         {
-            return await _context.Applications.ToListAsync();
+            try
+            { 
+                return await _context.Applications.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving job applications.");
+                throw;
+            }
+            
         }
 
         public async Task<JobApplication?> GetApplicationByIdAsync(int id)
         {
-            return await _context.Applications.FindAsync(id);
+            try
+            {
+                return await _context.Applications.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving job application with ID {JobApplicationId}", id);
+                throw;
+            }            
         }
 
         public async Task AddApplicationAsync(JobApplication application)
